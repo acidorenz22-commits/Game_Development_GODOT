@@ -1,0 +1,53 @@
+[gd_scene format=3 uid="uid://bf7japrqvkyi2"]
+
+[ext_resource type="Script" uid="uid://c2dr3vdjgnx86" path="res://character_body_3d_test.gd" id="1_bj1go"]
+
+[sub_resource type="CapsuleShape3D" id="CapsuleShape3D_bj1go"]
+
+[sub_resource type="StandardMaterial3D" id="StandardMaterial3D_bj1go"]
+albedo_color = Color(0.9098039, 0.72156864, 0.5803922, 1)
+
+[sub_resource type="CapsuleMesh" id="CapsuleMesh_qaf55"]
+material = SubResource("StandardMaterial3D_bj1go")
+radius = 0.15
+height = 0.3
+
+[sub_resource type="StandardMaterial3D" id="StandardMaterial3D_5rtc0"]
+albedo_color = Color(0, 0, 0, 1)
+
+[sub_resource type="CylinderMesh" id="CylinderMesh_v503x"]
+material = SubResource("StandardMaterial3D_5rtc0")
+top_radius = 0.03
+bottom_radius = 0.04
+height = 0.15
+
+[node name="CharacterBody3D" type="CharacterBody3D" unique_id=319192009]
+script = ExtResource("1_bj1go")
+
+[node name="CollisionShape3D" type="CollisionShape3D" parent="." unique_id=480607312]
+shape = SubResource("CapsuleShape3D_bj1go")
+
+[node name="MeshInstance3D" type="MeshInstance3D" parent="." unique_id=1024947480]
+
+[node name="Head" type="Node3D" parent="." unique_id=9666573]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 0, 0.6, 0)
+
+[node name="Camera3D" type="Camera3D" parent="Head" unique_id=1181671937]
+
+[node name="SpotLight3D" type="SpotLight3D" parent="Head/Camera3D" unique_id=1500358000]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 0, 0, -0.5)
+visible = false
+spot_range = 15.0
+spot_angle = 25.0
+
+[node name="HandsRig" type="Node3D" parent="Head/Camera3D" unique_id=848075277]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 0.3, -0.3, -0.5)
+
+[node name="Hand" type="MeshInstance3D" parent="Head/Camera3D/HandsRig" unique_id=1868614261]
+transform = Transform3D(1, 0, 0, 0, -4.371139e-08, -1, 0, 1, -4.371139e-08, 0, 0, 0)
+mesh = SubResource("CapsuleMesh_qaf55")
+
+[node name="HandFlashlight" type="MeshInstance3D" parent="Head/Camera3D/HandsRig" unique_id=1905406159]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 0, 0, -0.2)
+visible = false
+mesh = SubResource("CylinderMesh_v503x")
