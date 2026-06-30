@@ -7,15 +7,18 @@ const GRAVITY       = 9.8
 const MOUSE_SENSITIVITY = 0.003
 const BOB_FREQ   = 2.0
 const BOB_AMOUNT = 0.05
+const FOOTSTEP_INTERVAL = 0.5
 
 var bob_time       = 0.0
 var has_flashlight = false
 var flashlight_on  = false
+var footstep_timer = 0.0
 
 @onready var head            = $Head
 @onready var camera          = $Head/Camera3D
 @onready var flashlight      = $Head/Camera3D/SpotLight3D
 @onready var hand_flashlight = $Head/Camera3D/HandsRig/HandFlashlight
+@onready var footstep_player = $FootstepPlayer
 
 func _ready():
 	Input.set_mouse_mode(Input.MOUSE_MODE_CAPTURED)
@@ -29,7 +32,6 @@ func _unhandled_input(event):
 	if event.is_action_pressed("ui_cancel"):
 		Input.set_mouse_mode(Input.MOUSE_MODE_VISIBLE)
 
-	# Toggle flashlight with F
 	if event.is_action_pressed("toggle_flashlight") and has_flashlight:
 		flashlight_on = !flashlight_on
 		flashlight.visible = flashlight_on
@@ -39,6 +41,7 @@ func _physics_process(delta):
 	_handle_jump()
 	_handle_movement(delta)
 	_head_bob(delta)
+	_handle_footsteps(delta)
 	_check_pickup()
 	move_and_slide()
 
@@ -50,7 +53,7 @@ func _handle_jump():
 	if Input.is_action_just_pressed("ui_accept") and is_on_floor():
 		velocity.y = JUMP_VELOCITY
 
-func _handle_movement(delta):
+func _handle_movement(_delta):
 	var speed = SPRINT_SPEED if Input.is_action_pressed("sprint") else WALK_SPEED
 	var input_dir = Input.get_vector("move_left", "move_right", "move_forward", "move_back")
 	var direction = (transform.basis * Vector3(input_dir.x, 0, input_dir.y)).normalized()
@@ -68,6 +71,17 @@ func _head_bob(delta):
 		camera.transform.origin.y = sin(bob_time) * BOB_AMOUNT
 	else:
 		camera.transform.origin.y = lerp(camera.transform.origin.y, 0.0, delta * 10)
+
+func _handle_footsteps(delta):
+	var is_moving = velocity.length() > 0.5 and is_on_floor()
+	if is_moving:
+		footstep_timer -= delta
+		if footstep_timer <= 0.0:
+			footstep_player.play()
+			var interval = FOOTSTEP_INTERVAL / 1.6 if Input.is_action_pressed("sprint") else FOOTSTEP_INTERVAL
+			footstep_timer = interval
+	else:
+		footstep_timer = 0.0
 
 func _check_pickup():
 	if Input.is_action_just_pressed("interact"):

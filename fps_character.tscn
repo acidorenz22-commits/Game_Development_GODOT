@@ -1,6 +1,7 @@
 [gd_scene format=3 uid="uid://bf7japrqvkyi2"]
 
 [ext_resource type="Script" uid="uid://c2dr3vdjgnx86" path="res://character_body_3d_test.gd" id="1_bj1go"]
+[ext_resource type="AudioStream" uid="uid://f5b1tj4nkaha" path="res://166509__yoyodaman234__concrete-footstep-1.wav" id="2_qaf55"]
 
 [sub_resource type="CapsuleShape3D" id="CapsuleShape3D_bj1go"]
 
@@ -51,3 +52,45 @@ mesh = SubResource("CapsuleMesh_qaf55")
 transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 0, 0, -0.2)
 visible = false
 mesh = SubResource("CylinderMesh_v503x")
+
+[node name="HUD" type="CanvasLayer" parent="." unique_id=1082081579]
+
+[node name="Root" type="Control" parent="HUD" unique_id=922029653]
+layout_mode = 3
+anchors_preset = 15
+anchor_right = 1.0
+anchor_bottom = 1.0
+grow_horizontal = 2
+grow_vertical = 2
+mouse_filter = 2
+
+[node name="Crosshair" type="Control" parent="HUD/Root" unique_id=276828480]
+layout_mode = 1
+anchors_preset = 8
+anchor_left = 0.5
+anchor_top = 0.5
+anchor_right = 0.5
+anchor_bottom = 0.5
+grow_horizontal = 2
+grow_vertical = 2
+mouse_filter = 2
+
+[node name="Label" type="Label" parent="HUD/Root/Crosshair" unique_id=357599349]
+layout_mode = 1
+anchors_preset = 8
+anchor_left = 0.5
+anchor_top = 0.5
+anchor_right = 0.5
+anchor_bottom = 0.5
+offset_left = -20.0
+offset_top = -22.5
+offset_right = 20.0
+offset_bottom = 22.5
+grow_horizontal = 2
+grow_vertical = 2
+theme_override_font_sizes/font_size = 32
+text = "+"
+
+[node name="FootstepPlayer" type="AudioStreamPlayer3D" parent="." unique_id=369137844]
+stream = ExtResource("2_qaf55")
+max_distance = 20.0

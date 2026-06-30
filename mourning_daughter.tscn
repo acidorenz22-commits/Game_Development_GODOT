@@ -1,0 +1,30 @@
+[gd_scene format=3 uid="uid://cv52h4lti7ldd"]
+
+[ext_resource type="Script" uid="uid://ckbpbstejiy53" path="res://mourning_daughter.gd" id="1_xhai7"]
+[ext_resource type="AudioStream" uid="uid://c4n43q7g0aclp" path="res://521600__michellelindemann1__crying-girl.wav" id="2_dnw1s"]
+
+[sub_resource type="CapsuleShape3D" id="CapsuleShape3D_xhai7"]
+
+[sub_resource type="StandardMaterial3D" id="StandardMaterial3D_dnw1s"]
+albedo_color = Color(0.101960786, 0.101960786, 0.101960786, 1)
+
+[sub_resource type="CapsuleMesh" id="CapsuleMesh_76nj1"]
+material = SubResource("StandardMaterial3D_dnw1s")
+radius = 0.3
+height = 1.8
+
+[node name="MourningDaughter" type="CharacterBody3D" unique_id=1026318932]
+script = ExtResource("1_xhai7")
+
+[node name="CollisionShape3D" type="CollisionShape3D" parent="." unique_id=2024303580]
+shape = SubResource("CapsuleShape3D_xhai7")
+
+[node name="MeshInstance3D" type="MeshInstance3D" parent="." unique_id=340822909]
+mesh = SubResource("CapsuleMesh_76nj1")
+
+[node name="NavigationAgent3D" type="NavigationAgent3D" parent="." unique_id=272766181]
+
+[node name="AudioStreamPlayer3D" type="AudioStreamPlayer3D" parent="." unique_id=1229106549]
+stream = ExtResource("2_dnw1s")
+autoplay = true
+max_distance = 20.0

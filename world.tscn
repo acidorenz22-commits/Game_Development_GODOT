@@ -1,16 +1,7 @@
 [gd_scene format=3 uid="uid://kw8ovq1qk74x"]
 
 [ext_resource type="PackedScene" uid="uid://bf7japrqvkyi2" path="res://fps_character.tscn" id="1_f3sb7"]
-
-[sub_resource type="StandardMaterial3D" id="StandardMaterial3D_gv5m4"]
-albedo_color = Color(0.043137256, 0.6156863, 0.047058824, 1)
-
-[sub_resource type="PlaneMesh" id="PlaneMesh_f3sb7"]
-material = SubResource("StandardMaterial3D_gv5m4")
-size = Vector2(20, 20)
-
-[sub_resource type="BoxShape3D" id="BoxShape3D_gv5m4"]
-size = Vector3(20, 0.1, 20)
+[ext_resource type="PackedScene" uid="uid://cv52h4lti7ldd" path="res://mourning_daughter.tscn" id="2_fj7yv"]
 
 [sub_resource type="StandardMaterial3D" id="StandardMaterial3D_f3sb7"]
 albedo_color = Color(1.332, 1.332, 1.332, 1)
@@ -36,15 +27,21 @@ radius = 0.05
 [sub_resource type="SphereShape3D" id="SphereShape3D_036b0"]
 radius = 1.5
 
+[sub_resource type="NavigationMesh" id="NavigationMesh_tlwt5"]
+vertices = PackedVector3Array(-9.5, 0.45, -9.5, -9.5, 0.45, 9.5, 9.5, 0.45, 9.5, 9.5, 0.45, -9.5)
+polygons = [PackedInt32Array(3, 2, 0), PackedInt32Array(0, 2, 1)]
+
+[sub_resource type="StandardMaterial3D" id="StandardMaterial3D_gv5m4"]
+albedo_color = Color(0.043137256, 0.6156863, 0.047058824, 1)
+
+[sub_resource type="PlaneMesh" id="PlaneMesh_f3sb7"]
+material = SubResource("StandardMaterial3D_gv5m4")
+size = Vector2(20, 20)
+
+[sub_resource type="BoxShape3D" id="BoxShape3D_gv5m4"]
+size = Vector3(20, 0.1, 20)
+
 [node name="World" type="Node3D" unique_id=2089202944]
-
-[node name="StaticBody3D" type="StaticBody3D" parent="." unique_id=1318866275]
-
-[node name="MeshInstance3D" type="MeshInstance3D" parent="StaticBody3D" unique_id=2066551420]
-mesh = SubResource("PlaneMesh_f3sb7")
-
-[node name="CollisionShape3D" type="CollisionShape3D" parent="StaticBody3D" unique_id=994973643]
-shape = SubResource("BoxShape3D_gv5m4")
 
 [node name="DirectionalLight3D" type="DirectionalLight3D" parent="." unique_id=1141140607]
 transform = Transform3D(1, 0, 0, 0, 0.70710677, 0.70710677, 0, -0.70710677, 0.70710677, 0, 0, 0)
@@ -72,4 +69,18 @@ shape = SubResource("CylinderShape3D_aqk2v")
 [node name="CollisionShape3D" type="CollisionShape3D" parent="Flashlight/Area3D" unique_id=223742734]
 shape = SubResource("SphereShape3D_036b0")
 
-[node name="CharacterBody3D" parent="." unique_id=319192009 instance=ExtResource("1_f3sb7")]
+[node name="CharacterBody3D" parent="." unique_id=319192009 groups=["player"] instance=ExtResource("1_f3sb7")]
+
+[node name="NavigationRegion3D" type="NavigationRegion3D" parent="." unique_id=187041064]
+navigation_mesh = SubResource("NavigationMesh_tlwt5")
+
+[node name="StaticBody3D" type="StaticBody3D" parent="NavigationRegion3D" unique_id=1318866275]
+
+[node name="MeshInstance3D" type="MeshInstance3D" parent="NavigationRegion3D/StaticBody3D" unique_id=2066551420]
+mesh = SubResource("PlaneMesh_f3sb7")
+
+[node name="CollisionShape3D" type="CollisionShape3D" parent="NavigationRegion3D/StaticBody3D" unique_id=994973643]
+shape = SubResource("BoxShape3D_gv5m4")
+
+[node name="MourningDaughter" parent="." unique_id=1026318932 instance=ExtResource("2_fj7yv")]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 1, 4, 0)
