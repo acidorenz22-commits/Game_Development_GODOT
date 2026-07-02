@@ -13,7 +13,7 @@ material = SubResource("StandardMaterial3D_dnw1s")
 radius = 0.3
 height = 1.8
 
-[node name="MourningDaughter" type="CharacterBody3D" unique_id=1026318932]
+[node name="MourningDaughter" type="CharacterBody3D" unique_id=1026318932 groups=["mourning_daughter"]]
 script = ExtResource("1_xhai7")
 
 [node name="CollisionShape3D" type="CollisionShape3D" parent="." unique_id=2024303580]
@@ -26,5 +26,6 @@ mesh = SubResource("CapsuleMesh_76nj1")
 
 [node name="AudioStreamPlayer3D" type="AudioStreamPlayer3D" parent="." unique_id=1229106549]
 stream = ExtResource("2_dnw1s")
+unit_size = 5.0
 autoplay = true
 max_distance = 20.0

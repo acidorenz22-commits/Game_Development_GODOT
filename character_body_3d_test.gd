@@ -1,24 +1,30 @@
 extends CharacterBody3D
 
-const WALK_SPEED    = 5.0
-const SPRINT_SPEED  = 8.0
-const JUMP_VELOCITY = 4.5
-const GRAVITY       = 9.8
+const WALK_SPEED        = 5.0
+const SPRINT_SPEED      = 8.0
+const JUMP_VELOCITY     = 4.5
+const GRAVITY           = 9.8
 const MOUSE_SENSITIVITY = 0.003
-const BOB_FREQ   = 2.0
-const BOB_AMOUNT = 0.05
+const BOB_FREQ          = 2.0
+const BOB_AMOUNT        = 0.05
 const FOOTSTEP_INTERVAL = 0.5
+const MIRROR_COOLDOWN   = 5.0
 
-var bob_time       = 0.0
-var has_flashlight = false
-var flashlight_on  = false
-var footstep_timer = 0.0
+var bob_time        = 0.0
+var has_flashlight  = false
+var flashlight_on   = false
+var footstep_timer  = 0.0
+var has_mirror      = false
+var mirror_raised   = false
+var mirror_cooldown = 0.0
 
 @onready var head            = $Head
 @onready var camera          = $Head/Camera3D
 @onready var flashlight      = $Head/Camera3D/SpotLight3D
 @onready var hand_flashlight = $Head/Camera3D/HandsRig/HandFlashlight
+@onready var mirror_mesh     = $Head/Camera3D/HandsRig/MirrorMesh
 @onready var footstep_player = $FootstepPlayer
+@onready var flashlight_ray  = $Head/Camera3D/FlashlightRay
 
 func _ready():
 	Input.set_mouse_mode(Input.MOUSE_MODE_CAPTURED)
@@ -36,6 +42,16 @@ func _unhandled_input(event):
 		flashlight_on = !flashlight_on
 		flashlight.visible = flashlight_on
 
+	# Raise mirror
+	if event.is_action_pressed("use_mirror") and has_mirror and mirror_cooldown <= 0.0:
+		mirror_raised = true
+		mirror_mesh.visible = true
+
+	# Lower mirror
+	if event.is_action_released("use_mirror"):
+		mirror_raised = false
+		mirror_mesh.visible = false
+
 func _physics_process(delta):
 	_apply_gravity(delta)
 	_handle_jump()
@@ -43,6 +59,8 @@ func _physics_process(delta):
 	_head_bob(delta)
 	_handle_footsteps(delta)
 	_check_pickup()
+	_check_flashlight_ray()
+	_handle_mirror_cooldown(delta)
 	move_and_slide()
 
 func _apply_gravity(delta):
@@ -83,13 +101,24 @@ func _handle_footsteps(delta):
 	else:
 		footstep_timer = 0.0
 
+func _handle_mirror_cooldown(delta):
+	if mirror_cooldown > 0.0:
+		mirror_cooldown -= delta
+
 func _check_pickup():
-	if Input.is_action_just_pressed("interact"):
+	if not has_flashlight:
 		var flashlight_node = get_tree().get_first_node_in_group("flashlight")
-		if flashlight_node and not has_flashlight:
+		if flashlight_node:
 			var dist = global_position.distance_to(flashlight_node.global_position)
-			if dist < 2.0:
+			if Input.is_action_just_pressed("interact") and dist < 2.0:
 				_pickup_flashlight(flashlight_node)
+
+	if not has_mirror:
+		var mirror_node = get_tree().get_first_node_in_group("mirror")
+		if mirror_node:
+			var dist = global_position.distance_to(mirror_node.global_position)
+			if Input.is_action_just_pressed("interact") and dist < 2.0:
+				_pickup_mirror(mirror_node)
 
 func _pickup_flashlight(node):
 	has_flashlight = true
@@ -98,3 +127,33 @@ func _pickup_flashlight(node):
 	hand_flashlight.visible = true
 	node.queue_free()
 	print("Flashlight picked up!")
+
+func _pickup_mirror(node):
+	has_mirror = true
+	node.queue_free()
+	print("Mirror picked up!")
+
+func _check_flashlight_ray():
+	var watcher = get_tree().get_first_node_in_group("watcher")
+
+	if not flashlight_on:
+		if watcher:
+			watcher.stop_watching()
+		return
+
+	if flashlight_ray.is_colliding():
+		var hit = flashlight_ray.get_collider()
+		if hit:
+			if hit.is_in_group("mourning_daughter"):
+				hit.trigger_chase()
+			if hit.is_in_group("watcher"):
+				# Mirror raised = reflect gaze = stun it!
+				if mirror_raised and mirror_cooldown <= 0.0:
+					hit.reflect_stun()
+					mirror_cooldown = MIRROR_COOLDOWN
+					print("Mirror reflected! Watcher stunned!")
+				else:
+					hit.being_watched()
+	else:
+		if watcher:
+			watcher.stop_watching()

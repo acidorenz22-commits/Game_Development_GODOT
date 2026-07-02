@@ -1,0 +1,26 @@
+[gd_scene format=3 uid="uid://0x0qgdpw0fwu"]
+
+[ext_resource type="Script" uid="uid://crbx754tlokgw" path="res://watcher.gd" id="1_d7tun"]
+
+[sub_resource type="CapsuleShape3D" id="CapsuleShape3D_d7tun"]
+
+[sub_resource type="StandardMaterial3D" id="StandardMaterial3D_2b0m1"]
+albedo_color = Color(0.03137255, 0.03137255, 0.03137255, 1)
+
+[sub_resource type="CapsuleMesh" id="CapsuleMesh_j5ge6"]
+material = SubResource("StandardMaterial3D_2b0m1")
+radius = 0.35
+height = 2.2
+
+[node name="Watcher" type="CharacterBody3D" unique_id=1732899575 groups=["watcher"]]
+script = ExtResource("1_d7tun")
+
+[node name="CollisionShape3D" type="CollisionShape3D" parent="." unique_id=1384858022]
+shape = SubResource("CapsuleShape3D_d7tun")
+
+[node name="MeshInstance3D" type="MeshInstance3D" parent="." unique_id=499898505]
+mesh = SubResource("CapsuleMesh_j5ge6")
+
+[node name="NavigationAgent3D" type="NavigationAgent3D" parent="." unique_id=1448448490]
+
+[node name="AudioStreamPlayer3D" type="AudioStreamPlayer3D" parent="." unique_id=2032634949]

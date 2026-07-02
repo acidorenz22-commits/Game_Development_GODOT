@@ -2,6 +2,7 @@
 
 [ext_resource type="PackedScene" uid="uid://bf7japrqvkyi2" path="res://fps_character.tscn" id="1_f3sb7"]
 [ext_resource type="PackedScene" uid="uid://cv52h4lti7ldd" path="res://mourning_daughter.tscn" id="2_fj7yv"]
+[ext_resource type="PackedScene" uid="uid://0x0qgdpw0fwu" path="res://watcher.tscn" id="3_tlwt5"]
 
 [sub_resource type="StandardMaterial3D" id="StandardMaterial3D_f3sb7"]
 albedo_color = Color(1.332, 1.332, 1.332, 1)
@@ -26,6 +27,16 @@ radius = 0.05
 
 [sub_resource type="SphereShape3D" id="SphereShape3D_036b0"]
 radius = 1.5
+
+[sub_resource type="StandardMaterial3D" id="StandardMaterial3D_tlwt5"]
+albedo_color = Color(0.7529412, 0.7529412, 0.7529412, 1)
+
+[sub_resource type="BoxMesh" id="BoxMesh_aqk2v"]
+material = SubResource("StandardMaterial3D_tlwt5")
+size = Vector3(0.1, 0.5, 0.8)
+
+[sub_resource type="BoxShape3D" id="BoxShape3D_036b0"]
+size = Vector3(0.1, 0.5, 0.8)
 
 [sub_resource type="NavigationMesh" id="NavigationMesh_tlwt5"]
 vertices = PackedVector3Array(-9.5, 0.45, -9.5, -9.5, 0.45, 9.5, 9.5, 0.45, 9.5, 9.5, 0.45, -9.5)
@@ -69,6 +80,16 @@ shape = SubResource("CylinderShape3D_aqk2v")
 [node name="CollisionShape3D" type="CollisionShape3D" parent="Flashlight/Area3D" unique_id=223742734]
 shape = SubResource("SphereShape3D_036b0")
 
+[node name="Mirror" type="StaticBody3D" parent="." unique_id=896911840 groups=["mirror"]]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, -4.363463, 0.28344738, 0)
+
+[node name="MeshInstance3D" type="MeshInstance3D" parent="Mirror" unique_id=152064051]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 0, 0.92504513, 0)
+mesh = SubResource("BoxMesh_aqk2v")
+
+[node name="CollisionShape3D" type="CollisionShape3D" parent="Mirror" unique_id=651841518]
+shape = SubResource("BoxShape3D_036b0")
+
 [node name="CharacterBody3D" parent="." unique_id=319192009 groups=["player"] instance=ExtResource("1_f3sb7")]
 
 [node name="NavigationRegion3D" type="NavigationRegion3D" parent="." unique_id=187041064]
@@ -83,4 +104,7 @@ mesh = SubResource("PlaneMesh_f3sb7")
 shape = SubResource("BoxShape3D_gv5m4")
 
 [node name="MourningDaughter" parent="." unique_id=1026318932 instance=ExtResource("2_fj7yv")]
-transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 1, 4, 0)
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 6.9346237, 1.13163, 0)
+
+[node name="Watcher" parent="." unique_id=1732899575 instance=ExtResource("3_tlwt5")]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, -5, 2.4193883, -8)

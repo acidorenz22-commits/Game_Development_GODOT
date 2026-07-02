@@ -1,0 +1,31 @@
+[gd_scene format=3 uid="uid://bs80bfkci6uvy"]
+
+[ext_resource type="Script" uid="uid://djinxh0fiq62x" path="res://game_over.gd" id="1_y26ei"]
+
+[node name="GameOver" type="CanvasLayer" unique_id=1344575034]
+script = ExtResource("1_y26ei")
+
+[node name="ColorRect" type="ColorRect" parent="." unique_id=746343137]
+anchors_preset = 15
+anchor_right = 1.0
+anchor_bottom = 1.0
+grow_horizontal = 2
+grow_vertical = 2
+color = Color(0.2946382, 3.218744e-07, 8.4228816e-08, 1)
+
+[node name="Label" type="Label" parent="." unique_id=1083646899]
+anchors_preset = 8
+anchor_left = 0.5
+anchor_top = 0.5
+anchor_right = 0.5
+anchor_bottom = 0.5
+offset_left = -46.0
+offset_top = -11.5
+offset_right = 46.0
+offset_bottom = 11.5
+grow_horizontal = 2
+grow_vertical = 2
+theme_override_font_sizes/font_size = 72
+text = "GAME OVER"
+horizontal_alignment = 1
+vertical_alignment = 1
